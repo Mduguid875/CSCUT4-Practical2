@@ -4,31 +4,86 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import java.lang.Number;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 /**
- * 
  * CSCU9T4 Java strings and files exercise.
  *
  */
 public class FilesInOut {
 
     public static void main(String[] args) {
-        // Replace this with statements to set the file name (input) and file name (output).
-        // Initially it will be easier to hardcode suitable file names.
+        // Initializing String for input and formatted files
+        String inputFile = "input.txt";
+        String outputFile = "formatted.txt";
+        boolean isUpperCase = false;
 
-        // Set up a new Scanner to read the input file.
-        // Processing line by line would be sensible here.
-        // Initially, echo the text to System.out to check you are reading correctly.
-        // Then add code to modify the text to the output format.
+        // Parsing the command line
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("-u")) {
+                isUpperCase = true;
+            } else if (inputFile == null) {
+                inputFile = args[i];
+            } else if (outputFile == null) {
+                outputFile = args[i];
+            }
+        }
 
-        // Set up a new PrintWriter to write the output file.
-        // Add suitable code into the above processing (because you need to do this line by line also.
-        // That is, read a line, write a line, loop.
+        // Arguements are checked for correct areguements
+        if (inputFile == null || outputFile == null) {
+            System.err.println("Usage: java FilesInOut [-u] inputfile outputfile");
+            System.exit(1);
+        }
 
-        // Finally, add code to read the filenames as arguments from the command line.
+        // Input files processed and written onto the output
+        try (Scanner sc = new Scanner(new File(inputFile));
+             PrintWriter writer = new PrintWriter(outputFile)) {
 
-        System.out.println("You need to add your own code to do anything");
+            while (sc.hasNextLine()) {
+                String line = sc.nextLine().trim();
+                if (!line.isEmpty()) {
+                    String[] parts = line.split(" ");
+                    String formatName = formatName(parts[0]) + " " + formatName(parts[1]);
+                    String formatDate = formatDate(parts[2]);
+                    if (isUpperCase) {
+                        writer.println(formatName.toUpperCase() + " " + formatDate);
+                    } else {
+                        writer.println(formatName + " " + formatDate);
+                    }
+                }
+            }
+
+        } catch (FileNotFoundException e) {
+            System.err.println("File not found: " + e.getMessage());
+        }
+    }
+
+
+    /**
+     * Format a date from "ddmmyyyy" to "dd/mm yyyy".
+     *
+     * @param date Date to be formatted.
+     * @return Formatted date.
+     */
+    public static String formatDate(String date) {
+        return date.substring(0, 2) + "/" + date.substring(2, 4) + " " + date.substring(4);
+    }
+
+    /**
+     * Formats the title case.
+     *
+     * @param name Name to be formatted.
+     * @return Formatted name.
+     */
+    public static String formatName(String name) {
+        return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
 
     } // main
 
 } // FilesInOut
+
