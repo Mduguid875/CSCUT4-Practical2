@@ -1,0 +1,68 @@
+import java.io.*;
+import java.util.*;
+
+/**
+ * CSCU9T4 Java strings and files exercise.
+ * @author Nabeel
+ */
+public class FormatNames {
+    private static String DATE_FORMAT = "dd/MM/yyyy";
+    private static String INPUT_FILE = "input.txt";
+    private static String OUTPUT_FILE = "output.txt";
+    private static boolean toUpperCase = false;
+
+    public static void main(String[] args) {
+        // Check for command-line arguments
+        if (args.length >= 2) {
+            INPUT_FILE = args[0];
+            OUTPUT_FILE = args[1];
+        }
+        if (args.length >= 3 && args[2].equals("-u")) {
+            toUpperCase = true;
+        }
+
+        try (Scanner sc = new Scanner(new File(INPUT_FILE));
+             PrintWriter writer = new PrintWriter(OUTPUT_FILE)) {
+            
+        } catch (FileNotFoundException e) {
+            System.err.println("File not found: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Formats a name to uppercase.
+     * @param name Name to format.
+     * @return Formatted name.
+     */
+    public static String formatName(String name) {
+        if (toUpperCase) {
+            return name.toUpperCase();
+        } else {
+            return Character.toUpperCase(name.charAt(0)) + name.substring(1).toLowerCase();
+        }
+    }
+
+    /**
+     * Formats a middle name to title case with a period.
+     * @param name Middle name to format.
+     * @return Formatted middle name.
+     */
+    public static String formatMiddleInitial(String name) {
+        if (name.isEmpty()) {
+            return "";
+        } else {
+            return Character.toUpperCase(name.charAt(0)) + ".";
+        }
+    }
+
+    /**
+     * Formats a date from "ddmmyyyy" to "dd/MM/yyyy" format.
+     * @param date Date to format.
+     * @return Formatted date.
+     */
+    public static String formatDate(String date) {
+        return date.substring(0, 2) + "/" + date.substring(2, 4) + "/" + date.substring(4);
+    }
+}
+    
+    
